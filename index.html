@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agence Audiovisuelle - Publicité & Services</title>
+    <meta name="description" content="Agence audiovisuelle spécialisée dans la création de publicités et campagnes pour aider les entreprises à se démarquer." />
+    <meta name="keywords" content="audiovisuel, publicité, agence, marketing, vidéo, communication, entreprise" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+</head>
+<body>
+    <div id="intro-overlay" role="dialog" aria-modal="true" aria-label="Écran d'introduction avec projecteur">
+        <div class="spinner" aria-hidden="true"></div>
+        <button id="start-button" aria-label="Commencer la visite du site">Commencer</button>
+    </div>
+
+    <div id="main-content" style="display:none;">
+        <header>
+            <div class="container">
+                <h1 class="logo">Agence Audiovisuelle</h1>
+                <nav role="navigation" aria-label="Menu principal">
+                    <button id="nav-toggle" aria-controls="nav-menu" aria-expanded="false" aria-label="Afficher le menu">☰</button>
+                    <ul class="nav-links" id="nav-menu">
+                        <li><a href="#hero">Accueil</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#about">À propos</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+    <section id="hero">
+        <div class="container hero-content">
+            <h2>Votre partenaire pour des publicités audiovisuelles percutantes</h2>
+            <p>Nous aidons les entreprises à créer des campagnes publicitaires efficaces et mémorables.</p>
+            <a href="#contact" class="btn-primary btn-yellow">Contactez-nous</a>
+        </div>
+    </section>
+
+    <section id="services" aria-label="Nos services">
+        <div class="container">
+            <h2>Nos Services</h2>
+            <div class="services-list">
+                <div class="service-item">
+                    <img src="https://via.placeholder.com/300x180" alt="Production Vidéo" />
+                    <h3>Production Vidéo</h3>
+                    <p>Création de vidéos promotionnelles, clips, et contenus audiovisuels adaptés à votre marque.</p>
+                </div>
+                <div class="service-item">
+                    <img src="https://via.placeholder.com/300x180" alt="Stratégie Publicitaire" />
+                    <h3>Stratégie Publicitaire</h3>
+                    <p>Conception de campagnes publicitaires ciblées pour maximiser votre visibilité.</p>
+                </div>
+                <div class="service-item">
+                    <img src="https://via.placeholder.com/300x180" alt="Montage et Post-Production" />
+                    <h3>Montage & Post-Production</h3>
+                    <p>Montage professionnel et effets visuels pour un rendu de qualité supérieure.</p>
+                </div>
+                <div class="service-item">
+                    <img src="https://via.placeholder.com/300x180" alt="Conseil en Communication" />
+                    <h3>Conseil en Communication</h3>
+                    <p>Accompagnement personnalisé pour optimiser votre message et votre image.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" aria-label="Témoignages clients">
+        <div class="container">
+            <h2>Témoignages</h2>
+            <div class="testimonial-list">
+                <blockquote>
+                    <p>"Une équipe professionnelle et créative qui a transformé notre communication."</p>
+                    <footer>- Client Satisfait</footer>
+                </blockquote>
+                <blockquote>
+                    <p>"Des résultats impressionnants grâce à leur expertise audiovisuelle."</p>
+                    <footer>- Client Heureux</footer>
+                </blockquote>
+                <blockquote>
+                    <p>"Service personnalisé et attentionné, je recommande vivement."</p>
+                    <footer>- Client Fidèle</footer>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" aria-label="À propos de l'agence">
+        <div class="container">
+            <h2>À propos de nous</h2>
+            <p>Agence Audiovisuelle est une équipe passionnée dédiée à la création de contenus publicitaires innovants et efficaces. Nous mettons notre expertise au service des entreprises pour les aider à se démarquer sur le marché.</p>
+        </div>
+    </section>
+
+    <section id="contact" aria-label="Contactez l'agence">
+        <div class="container">
+            <h2>Contactez-nous</h2>
+            <p>Pour toute demande ou devis, n'hésitez pas à nous contacter :</p>
+            <ul class="contact-info">
+                <li>Email : contact@agenceaudiovisuelle.com</li>
+                <li>Téléphone : +33 1 23 45 67 89</li>
+                <li>Adresse : 123 Rue de la Publicité, Paris, France</li>
+            </ul>
+            <form id="newsletter-form" aria-label="Formulaire d'inscription à la newsletter">
+                <label for="email">Inscrivez-vous à notre newsletter :</label>
+                <input type="email" id="email" name="email" placeholder="Votre email" required />
+                <button type="submit">S'inscrire</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <nav aria-label="Navigation rapide dans le pied de page">
+                <ul class="footer-nav">
+                    <li><a href="#hero">Accueil</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="social-links" aria-label="Liens vers les réseaux sociaux">
+                <a href="#" aria-label="Facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="#" aria-label="Twitter" target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="#" aria-label="Instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
+            </div>
+            <p>&copy; 2024 Agence Audiovisuelle. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+<button id="back-to-top" aria-label="Retour en haut">↑</button>
+
+<script>
+    // Toggle navigation menu on mobile
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    navToggle.addEventListener('click', () => {
+        const expanded = navToggle.getAttribute('aria-expanded') === 'true' || false;
+        navToggle.setAttribute('aria-expanded', !expanded);
+        navMenu.style.display = expanded ? 'none' : 'block';
+    });
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('nav ul li a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetID = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetID);
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+            // Close menu on mobile after click
+            if (window.innerWidth < 768) {
+                navMenu.style.display = 'none';
+                navToggle.setAttribute('aria-expanded', false);
+            }
+        });
+    });
+
+    // Spotlight and intro overlay script
+    const overlay = document.getElementById('intro-overlay');
+    const startButton = document.getElementById('start-button');
+    const mainContent = document.getElementById('main-content');
+
+    // Update spotlight position on mouse move
+    overlay.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const y = e.clientY;
+        overlay.style.setProperty('--spot-x', `${x}px`);
+        overlay.style.setProperty('--spot-y', `${y}px`);
+    });
+
+    // On button click, hide overlay and show main content
+    startButton.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        mainContent.style.display = 'block';
+    });
+
+    // Back to top button
+    const backToTopButton = document.getElementById('back-to-top');
+    backToTopButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Show/hide back to top button on scroll
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backToTopButton.style.display = 'block';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    });
+
+    // Newsletter form submission (dummy)
+    const newsletterForm = document.getElementById('newsletter-form');
+    newsletterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Merci pour votre inscription à la newsletter !');
+        newsletterForm.reset();
+    });
+</script>
+</body>
+</html>
