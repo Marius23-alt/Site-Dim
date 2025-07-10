@@ -11,8 +11,8 @@
 </head>
 <body>
     <div id="intro-overlay" role="dialog" aria-modal="true" aria-label="Écran d'introduction avec projecteur">
-        <div class="spinner" aria-hidden="true"></div>
         <button id="start-button" aria-label="Commencer la visite du site">Commencer</button>
+        <div id="mouse-circle" aria-hidden="true"></div>
     </div>
 
     <div id="main-content" style="display:none;">
@@ -140,7 +140,7 @@
     navToggle.addEventListener('click', () => {
         const expanded = navToggle.getAttribute('aria-expanded') === 'true' || false;
         navToggle.setAttribute('aria-expanded', !expanded);
-        navMenu.style.display = expanded ? 'none' : 'block';
+        navMenu.classList.toggle('show');
     });
 
     // Smooth scrolling for navigation links
@@ -165,15 +165,120 @@
     const startButton = document.getElementById('start-button');
     const mainContent = document.getElementById('main-content');
 
-    // Update spotlight position on mouse move
-    overlay.addEventListener('mousemove', (e) => {
-        const x = e.clientX;
-        const y = e.clientY;
-        overlay.style.setProperty('--spot-x', `${x}px`);
-        overlay.style.setProperty('--spot-y', `${y}px`);
-    });
+    // Update mouseCircle position on mouse move and toggle startButton visibility
+    const mouseCircle = document.getElementById('mouse-circle');
+
+    // Detect if device is touch capable
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+    if (isTouchDevice) {
+        // On tactile, afficher le bouton en permanence
+        startButton.style.opacity = '1';
+        // Afficher le cercle
+        mouseCircle.style.display = 'block';
+
+        // Position initiale du cercle (hors écran en haut à gauche)
+        let circleX = -mouseCircle.offsetWidth;
+        let circleY = -mouseCircle.offsetHeight;
+        mouseCircle.style.left = circleX + 'px';
+        mouseCircle.style.top = circleY + 'px';
+
+        // Durée de l'animation en ms
+        const duration = 1500;
+        let startTime = null;
+
+        function easeInOutQuad(t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+        }
+
+        let targetX = 0;
+        let targetY = 0;
+
+        function animateCircle(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const elapsed = timestamp - startTime;
+            const t = Math.min(elapsed / duration, 1);
+
+            const easedT = easeInOutQuad(t);
+
+            // Recalculer la position cible à chaque début d'animation pour s'adapter à la taille d'écran
+            if (t === 0) {
+                const rect = startButton.getBoundingClientRect();
+                targetX = rect.left + rect.width / 2 - mouseCircle.offsetWidth / 2;
+                targetY = rect.top + rect.height / 2 - mouseCircle.offsetHeight / 2;
+            }
+
+            // Calcul position interpolée avec easing et oscillation verticale
+            const oscillationAmplitude = 20; // px
+            const oscillationFrequency = 3; // nombre d'oscillations pendant l'animation
+            const currentX = circleX + (targetX - circleX) * easedT;
+            const currentY = circleY + (targetY - circleY) * easedT + Math.sin(easedT * Math.PI * oscillationFrequency) * oscillationAmplitude;
+
+            mouseCircle.style.left = currentX + 'px';
+            mouseCircle.style.top = currentY + 'px';
+
+            if (t < 1) {
+                window.requestAnimationFrame(animateCircle);
+            } else {
+                // Faire apparaître le bouton "Commencer"
+                startButton.style.opacity = '1';
+
+                // Animation terminée, faire un effet de pulsation
+                mouseCircle.animate([
+                    { transform: 'scale(1)' },
+                    { transform: 'scale(1.1)' },
+                    { transform: 'scale(1)' }
+                ], {
+                    duration: 600,
+                    iterations: 2
+                });
+                // Répéter l'animation après un délai
+                setTimeout(() => {
+                    startTime = null;
+                    // Cacher le bouton avant de relancer l'animation
+                    startButton.style.opacity = '0';
+                    window.requestAnimationFrame(animateCircle);
+                }, 2000);
+            }
+        }
+
+        window.requestAnimationFrame(animateCircle);
+
+        // Repositionner le cercle et bouton au resize
+        window.addEventListener('resize', () => {
+            const rect = startButton.getBoundingClientRect();
+            targetX = rect.left + rect.width / 2 - mouseCircle.offsetWidth / 2;
+            targetY = rect.top + rect.height / 2 - mouseCircle.offsetHeight / 2;
+        });
+
+    } else {
+        // Comportement PC avec souris
+        overlay.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            // Calculate offset based on current circle size to center it on mouse pointer
+            const circleRect = mouseCircle.getBoundingClientRect();
+            const offsetX = circleRect.width / 2;
+            const offsetY = circleRect.height / 2;
+            mouseCircle.style.left = (x - offsetX) + 'px';
+            mouseCircle.style.top = (y - offsetY) + 'px';
+
+            // Get button bounding rect
+            const rect = startButton.getBoundingClientRect();
+            // Check if mouse is over button or near mouse circle (within 100px radius)
+            const distX = Math.max(rect.left - x, x - rect.right, 0);
+            const distY = Math.max(rect.top - y, y - rect.bottom, 0);
+            const distance = Math.sqrt(distX * distX + distY * distY);
+            if (distance < 100) {
+                startButton.style.opacity = '1';
+            } else {
+                startButton.style.opacity = '0';
+            }
+        });
+    }
 
     // On button click, hide overlay and show main content
+    startButton.style.opacity = '0';
     startButton.addEventListener('click', () => {
         overlay.style.display = 'none';
         mainContent.style.display = 'block';

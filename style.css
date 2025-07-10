@@ -506,21 +506,6 @@ header::after {
     background-color: #f8d7e0; /* pale pink overlay */
 }
 
-/* Spinner animation */
-.spinner {
-    border: 6px solid #f4c2c2;
-    border-top: 6px solid var(--pastel-yellow-dark);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1001;
-}
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -709,19 +694,7 @@ button:active, a.btn-primary:active, a.btn-yellow:active {
     background-color: var(--pastel-yellow-dark);
 }
 
-/* Intro overlay fade and pulse */
-#intro-overlay {
-    animation: pulseBackground 3s ease-in-out infinite alternate;
-}
 
-@keyframes pulseBackground {
-    0% {
-        background: radial-gradient(circle 150px at var(--spot-x) var(--spot-y), #ffffffcc, #000000 250px);
-    }
-    100% {
-        background: radial-gradient(circle 180px at var(--spot-x) var(--spot-y), #fff9e6cc, #000000 280px);
-    }
-}
 
 /* Smooth scroll for all anchor links */
 html {
@@ -892,29 +865,42 @@ footer {
 
 /* Intro Overlay */
 #intro-overlay {
+    opacity: 1;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: #000000; /* pure black */
+    background-color: #000000;
     pointer-events: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    --spot-x: 50vw;
-    --spot-y: 50vh;
-    /* Spotlight effect using radial-gradient */
-    background: radial-gradient(circle 150px at var(--spot-x) var(--spot-y), #ffffffcc, #000000 250px);
-    transition: background 0.1s ease;
-    z-index: 1000;
+    z-index: 9999;
+}
+
+#mouse-circle {
+    position: absolute;
+    width: clamp(180px, 10vw, 250px);
+    height: clamp(180px, 10vw, 250px);
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    #mouse-circle {
+        width: clamp(220px, 10vw, 250px);
+        height: clamp(220px, 10vw, 250px);
+    }
 }
 
 #start-button {
     position: relative;
     z-index: 1010;
-    padding: 15px 40px;
-    font-size: 1.5rem;
+    padding: clamp(12px, 2vw, 15px) clamp(30px, 5vw, 40px);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
     font-weight: bold;
     color: #4b2e3b;
     background-color: #f4c2c2; /* pale pink */
@@ -923,7 +909,7 @@ footer {
     cursor: pointer;
     box-shadow: 0 0 15px #f4c2c2;
     transition: background-color 0.3s ease, opacity 0.3s ease;
-    opacity: 0.1;
+    opacity: 1;
 }
 
 #start-button:hover {
