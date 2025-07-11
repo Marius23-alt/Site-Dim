@@ -47,81 +47,138 @@ if (isTouchDevice) {
     mouseCircle.style.top = circleY + 'px';
 
     // Duration of the animation in ms
-    const duration = 4000;
+    const duration = 3000;
     let startTime = null;
 
     function easeInOutQuad(t) {
         return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
     }
 
-    let targetX = 0;
-    let targetY = 0;
+    // Generate multiple random intermediate points across the viewport with minimum distance between points
+    const intermediatePointsCount = 5;
+    const intermediatePoints = [];
+
+    function distance(p1, p2) {
+        return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+    }
+
+    function getRandomPoint() {
+        return {
+            x: Math.random() * (window.innerWidth - mouseCircle.offsetWidth),
+            y: Math.random() * (window.innerHeight - mouseCircle.offsetHeight)
+        };
+    }
+
+    while (intermediatePoints.length < intermediatePointsCount) {
+        let point = getRandomPoint();
+        if (intermediatePoints.length === 0) {
+            intermediatePoints.push(point);
+        } else {
+            let lastPoint = intermediatePoints[intermediatePoints.length - 1];
+            if (distance(point, lastPoint) > 150) { // minimum distance of 150px between points
+                intermediatePoints.push(point);
+            }
+        }
+    }
+
+    // Add final target point (button center) as last point
+    function getButtonCenter() {
+        const rect = startButton.getBoundingClientRect();
+        return {
+            x: rect.left + rect.width / 2 - mouseCircle.offsetWidth / 2,
+            y: rect.top + rect.height / 2 - mouseCircle.offsetHeight / 2
+        };
+    }
+    intermediatePoints.push(getButtonCenter());
+
+    // Total segments = intermediatePointsCount + 1 (start to first, between points, last to button)
+    const totalSegments = intermediatePoints.length;
+
+    // Calculate duration per segment
+    const segmentDuration = duration / totalSegments;
+
+    // Current segment index
+    let currentSegment = 0;
+
+    // Start position for current segment
+    let segmentStartX = circleX;
+    let segmentStartY = circleY;
+
+    // Target position for current segment
+    let segmentTargetX = intermediatePoints[0].x;
+    let segmentTargetY = intermediatePoints[0].y;
 
     // Randomize oscillation amplitude and frequency for trajectory variation
-    const oscillationAmplitude = 30 + Math.random() * 30; // between 30 and 60
-    const oscillationFrequency = 3 + Math.random() * 4; // between 3 and 7
+    const oscillationAmplitude = 3 + Math.random() * 3; // between 3 and 6, less jitter
+    const oscillationFrequency = 0.2 + Math.random() * 0.3; // between 0.2 and 0.5, slower oscillation
 
     function animateCircle(timestamp) {
         if (!startTime) startTime = timestamp;
         const elapsed = timestamp - startTime;
-        const t = Math.min(elapsed / duration, 1);
 
+        // Calculate time elapsed in current segment
+        const segmentElapsed = elapsed - currentSegment * segmentDuration;
+        const t = Math.min(segmentElapsed / segmentDuration, 1);
         const easedT = easeInOutQuad(t);
 
-        // Recalculate target position at animation start to adapt to screen size
-        if (t === 0) {
-            const rect = startButton.getBoundingClientRect();
-            targetX = rect.left + rect.width / 2 - mouseCircle.offsetWidth / 2;
-            targetY = rect.top + rect.height / 2 - mouseCircle.offsetHeight / 2;
-        }
-
         // Interpolated position with easing and oscillations for varied trajectory
-        // Adjust final position to be exactly centered on the button at t=1
-        let offsetX = 0;
-        let offsetY = 0;
-        if (t === 1) {
-            offsetX = targetX - mouseCircle.offsetLeft;
-            offsetY = targetY - mouseCircle.offsetTop;
-        }
-        const currentX = circleX + (targetX - circleX) * easedT + Math.sin(easedT * Math.PI * oscillationFrequency) * 10 + offsetX;
-        const currentY = circleY + (targetY - circleY) * easedT + Math.sin(easedT * Math.PI * oscillationFrequency) * oscillationAmplitude + offsetY;
+        let offsetX = Math.sin(easedT * Math.PI * oscillationFrequency) * 10;
+        let offsetY = Math.sin(easedT * Math.PI * oscillationFrequency) * oscillationAmplitude;
+
+        const currentX = segmentStartX + (segmentTargetX - segmentStartX) * easedT + offsetX;
+        const currentY = segmentStartY + (segmentTargetY - segmentStartY) * easedT + offsetY;
 
         mouseCircle.style.left = currentX + 'px';
         mouseCircle.style.top = currentY + 'px';
 
-        if (t < 1) {
-            window.requestAnimationFrame(animateCircle);
-        } else {
-            // Show the "Commencer" button
-            startButton.style.opacity = '1';
+        if (t >= 1) {
+            // Move to next segment
+            currentSegment++;
+            if (currentSegment < totalSegments) {
+                // Update segment start and target positions
+                segmentStartX = segmentTargetX;
+                segmentStartY = segmentTargetY;
+                segmentTargetX = intermediatePoints[currentSegment].x;
+                segmentTargetY = intermediatePoints[currentSegment].y;
+            } else {
+                // Animation finished, show the "Commencer" button
+                startButton.style.opacity = '1';
 
-            // Animation finished, start bounce effect in series of 3 bounces loop
-            function bounceSeries() {
-                let count = 0;
-                function bounce() {
-                    if (count < 3) {
-                        mouseCircle.animate([
-                            { transform: 'translateY(0) scale(1)' },
-                            { transform: 'translateY(-15px) scale(1.1)' },
-                            { transform: 'translateY(0) scale(1)' }
-                        ], {
-                            duration: 600,
-                            easing: 'ease-in-out',
-                            direction: 'alternate'
-                        }).onfinish = () => {
-                            count++;
+                // Ensure circle is exactly centered on the button at the end
+                const finalRect = startButton.getBoundingClientRect();
+                mouseCircle.style.left = (finalRect.left + finalRect.width / 2 - mouseCircle.offsetWidth / 2) + 'px';
+                mouseCircle.style.top = (finalRect.top + finalRect.height / 2 - mouseCircle.offsetHeight / 2) + 'px';
+
+                // Start bounce effect in series of 3 bounces loop
+                function bounceSeries() {
+                    let count = 0;
+                    function bounce() {
+                        if (count < 3) {
+                            mouseCircle.animate([
+                                { transform: 'translateY(0) scale(1)' },
+                                { transform: 'translateY(-15px) scale(1.1)' },
+                                { transform: 'translateY(0) scale(1)' }
+                            ], {
+                                duration: 600,
+                                easing: 'ease-in-out',
+                                direction: 'alternate'
+                            }).onfinish = () => {
+                                count++;
+                                bounce();
+                            };
+                        } else {
+                            count = 0;
                             bounce();
-                        };
-                    } else {
-                        count = 0;
-                        bounce();
+                        }
                     }
+                    bounce();
                 }
-                bounce();
+                bounceSeries();
+                return; // Stop animation loop
             }
-            bounceSeries();
-            // Do not restart full animation
         }
+
+        window.requestAnimationFrame(animateCircle);
     }
 
     window.requestAnimationFrame(animateCircle);
@@ -129,8 +186,10 @@ if (isTouchDevice) {
     // Repositionner le cercle et bouton au resize
     window.addEventListener('resize', () => {
         const rect = startButton.getBoundingClientRect();
-        targetX = rect.left + rect.width / 2 - mouseCircle.offsetWidth / 2;
-        targetY = rect.top + rect.height / 2 - mouseCircle.offsetHeight / 2;
+        const targetX = rect.left + rect.width / 2 - mouseCircle.offsetWidth / 2;
+        const targetY = rect.top + rect.height / 2 - mouseCircle.offsetHeight / 2;
+        mouseCircle.style.left = targetX + 'px';
+        mouseCircle.style.top = targetY + 'px';
     });
 
 } else {
@@ -188,3 +247,37 @@ newsletterForm.addEventListener('submit', (e) => {
     alert('Merci pour votre inscription à la newsletter !');
     newsletterForm.reset();
 });
+
+// Automatic background slideshow for hero section
+const heroBackground = document.querySelector('.hero-background');
+const images = [
+    'image/Conseil.jpg',
+    'image/Montage.jpg',
+    'image/Production.jpg',
+    'image/Strategie.jpg'
+];
+let currentIndex = 0;
+const slideInterval = 5000; // 5 seconds
+
+function changeBackground() {
+    // Add fade-out class to trigger opacity transition
+    heroBackground.classList.add('fade-out');
+
+    setTimeout(() => {
+        // Change background image
+        heroBackground.style.backgroundImage = `url(${images[currentIndex]})`;
+
+        // Remove fade-out class to fade back in
+        heroBackground.classList.remove('fade-out');
+
+        // Update index for next image
+        currentIndex = (currentIndex + 1) % images.length;
+    }, 1000); // Match the CSS transition duration
+}
+
+// Initialize the first background image
+heroBackground.style.backgroundImage = `url(${images[0]})`;
+currentIndex = 1;
+
+// Start the slideshow interval
+setInterval(changeBackground, slideInterval);
