@@ -248,6 +248,7 @@ newsletterForm.addEventListener('submit', (e) => {
     newsletterForm.reset();
 });
 
+
 // Automatic background slideshow for hero section
 const heroBackground = document.querySelector('.hero-background');
 const images = [
@@ -281,3 +282,30 @@ currentIndex = 1;
 
 // Start the slideshow interval
 setInterval(changeBackground, slideInterval);
+
+window.addEventListener('DOMContentLoaded', () => {
+    const servicesTrack = document.querySelector('.services-track');
+    if (servicesTrack) {
+        // Duplicate items for seamless scroll
+        const items = Array.from(servicesTrack.children);
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            servicesTrack.appendChild(clone);
+        });
+
+        let scrollAmount = 0;
+        const scrollStep = 1; // pixels per frame
+        const scrollInterval = 16; // approx 60fps
+
+        function scroll() {
+            scrollAmount += scrollStep;
+            if (scrollAmount >= servicesTrack.scrollWidth / 2) {
+                scrollAmount = 0;
+            }
+            servicesTrack.style.transform = `translateX(-${scrollAmount}px)`;
+            requestAnimationFrame(scroll);
+        }
+
+        requestAnimationFrame(scroll);
+    }
+});

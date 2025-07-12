@@ -17,7 +17,7 @@ body {
 :root {
     --pastel-yellow: #fff9e6;
     --pastel-yellow-dark: #f0e68c;
-    --pastel-pink : #f8d7e0;
+    --pastel-pink : #ffd6d0;
 }
 
 /* Example usage of pastel yellow */
@@ -825,21 +825,38 @@ html {
     color: #4b2e3b;
 }
 
+/* Container for horizontal scrolling */
 .services-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+    overflow: hidden;
+    width: 100%;
+    /* fixed height to avoid layout shift */
+    height: 360px;
+    position: relative;
 }
 
+/* Track container for scrolling animation */
+.services-track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    /* animation: scroll-left 20s linear infinite; */
+    animation :none;
+    width: max-content;
+}
+
+/* Individual service items */
 .service-item {
     background-color: var(--pastel-pink);
     border-radius: 8px;
     padding: 20px;
-    margin: 10px;
-    flex: 1 1 250px;
-    max-width: 300px;
+    margin-right: 20px;
+    flex: 0 0 300px;
     box-shadow: 0 2px 5px rgba(75, 46, 59, 0.1);
     transition: transform 0.3s ease;
+}
+
+.service-item:last-child { 
+    margin-right: 0; 
 }
 
 .service-item:hover {
@@ -854,6 +871,16 @@ html {
 .service-item p {
     font-size: 1rem;
     color: #4b2e3b;
+}
+
+/* Keyframes for continuous left scroll */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 
 /* About Section */
