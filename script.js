@@ -309,3 +309,79 @@ window.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(scroll);
     }
 });
+
+
+// Scroll Reveal effect for testimonials blockquotes
+document.addEventListener('DOMContentLoaded', () => {
+    const testimonials = document.querySelectorAll('.testimonial-list blockquote');
+    const testimonialHeading = document.querySelectorAll('#testimonials h2');
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal');
+            } else {
+                entry.target.classList.remove('reveal');
+            }
+        });
+    }, observerOptions);
+
+    testimonials.forEach(testimonial => {
+        observer.observe(testimonial);
+    });
+    testimonialHeading.forEach(heading => {
+        observer.observe(heading);
+    });
+});
+
+// Rotating Text effect for "Nos Services"
+document.addEventListener('DOMContentLoaded', () => {
+    const rotatingText = document.getElementById('rotating-text');
+    if (rotatingText) {
+        const words = ['Services', 'Conseils', 'Créations'];
+        let index = 0;
+
+        function changeWord() {
+            // Ajouter la classe blur-out pour l'animation de disparition
+            rotatingText.classList.add('blur-out');
+
+            rotatingText.addEventListener('animationend', () => {
+                // Après la disparition, changer le texte
+                rotatingText.classList.remove('blur-out');
+                index = (index + 1) % words.length;
+                rotatingText.textContent = words[index];
+
+                // Ajouter la classe blur pour l'animation d'apparition
+                rotatingText.classList.add('blur');
+            }, { once: true });
+
+            // Retirer la classe blur après l'animation d'apparition
+            rotatingText.addEventListener('animationend', () => {
+                rotatingText.classList.remove('blur');
+            }, { once: true });
+        }
+
+        // Lancer la première animation d'apparition
+        rotatingText.classList.add('blur');
+
+        // Changer de mot toutes les 3 secondes
+        setInterval(changeWord, 3000);
+    }
+
+    // Ajout du toggle menu mobile
+    const navToggle = document.getElementById('nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            const isExpanded = navToggle.getAttribute('aria-expanded') === 'true';
+            navToggle.setAttribute('aria-expanded', String(!isExpanded));
+            navMenu.classList.toggle('show');
+        });
+    }
+});

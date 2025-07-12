@@ -20,6 +20,91 @@ body {
     --pastel-pink : #ffd6d0;
 }
 
+/* Rotating Text falling animation */
+@keyframes fallDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#rotating-text {
+    background-color: var(--pastel-pink);
+    padding: 0 6px;
+    border-radius: 4px;
+    display: inline-block;
+    animation-fill-mode: forwards;
+}
+
+#rotating-text.fall {
+    animation-name: fallDown;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-out;
+}
+
+/* Blur text animation */
+@keyframes blurIn {
+    0% {
+        filter: blur(6px);
+        opacity: 0;
+    }
+    100% {
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+/* Blur out animation */
+@keyframes blurOut {
+    0% {
+        filter: blur(0);
+        opacity: 1;
+    }
+    100% {
+        filter: blur(6px);
+        opacity: 0;
+    }
+}
+
+#rotating-text.blur {
+    animation-name: blurIn;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+}
+
+#rotating-text.blur-out {
+    animation-name: blurOut;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+}
+
+/* Split Text animation for each character */
+@keyframes splitFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#rotating-text span.char {
+    display: inline-block;
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-name: splitFadeIn;
+    animation-duration: 0.5s;
+    animation-timing-function: ease-out;
+}
+
 /* Example usage of pastel yellow */
 .btn-yellow {
     background-color: var(--pastel-yellow);
@@ -41,7 +126,6 @@ body {
 section#services {
     background-color: var(--pastel-yellow);
     border-radius: 10px;
-    padding: 60px 0;
     /* margin-bottom: 30px; */
 }
 
@@ -362,7 +446,6 @@ nav ul li a:hover,
 nav ul li a:focus {
     color: #a85c7b; /* darker pink */
     outline: none;
-    text-decoration: underline;
     background-color: #d99aa8;
     color: #fff;
     transform: scale(1.1);
@@ -618,9 +701,8 @@ footer {
 
 .footer-nav li a:hover,
 .footer-nav li a:focus {
-    color: var(--pastel-yellow-dark);
+    color: white;
     outline: none;
-    text-decoration: underline;
 }
 
 .social-links {
@@ -639,9 +721,8 @@ footer {
 
 .social-links a:hover,
 .social-links a:focus {
-    color: var(--pastel-yellow-dark);
+    color: white;
     outline: none;
-    text-decoration: underline;
 }
 
 /* Back to top button */
@@ -671,7 +752,7 @@ footer {
 /* Testimonials section */
 #testimonials {
     background-color: var(--pastel-yellow);
-    padding: 50px 0;
+    padding: 0 0 20px 0;
     border-radius: 10px;
     margin-bottom: 30px;
     color: #4b2e3b;
@@ -753,6 +834,41 @@ footer {
     transform: translateY(0) scale(1);
 }
 
+/* Scroll Reveal effect for testimonials */
+.testimonial-list blockquote,
+#testimonials h2 {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.testimonial-list blockquote.reveal,
+#testimonials h2.reveal {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Scroll Float effect for individual characters */
+@keyframes floatUpFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.scroll-float-char {
+    display: inline-block;
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-name: floatUpFadeIn;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-out;
+}
+
 /* Button click animation */
 button, a.btn-primary, a.btn-yellow {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -814,7 +930,7 @@ html {
 
 /* Services Section */
 #services {
-    padding: 50px 0;
+    padding: 30px 0;
     background-color: #fff0f5; /* pale pink */
     text-align: center;
 }
@@ -830,7 +946,7 @@ html {
     overflow: hidden;
     width: 100%;
     /* fixed height to avoid layout shift */
-    height: 360px;
+    height: 420px;
     position: relative;
 }
 
@@ -1028,4 +1144,16 @@ footer {
 #start-button:hover {
     background-color: #d99aa8; /* darker pink */
     opacity: 1;
+}
+
+
+.testimonial-list blockquote {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.testimonial-list blockquote.reveal {
+    opacity: 1;
+    transform: translateY(0);
 }
