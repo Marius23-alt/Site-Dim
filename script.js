@@ -273,7 +273,7 @@ function changeBackground() {
 
         // Update index for next image
         currentIndex = (currentIndex + 1) % images.length;
-    }, 1000); // Match the CSS transition duration
+    }, 250); // Match the CSS transition duration
 }
 
 // Initialize the first background image
@@ -295,21 +295,61 @@ window.addEventListener('DOMContentLoaded', () => {
 
         let scrollAmount = 0;
         const scrollStep = 1; // pixels per frame
-        const scrollInterval = 16; // approx 60fps
+        let isPaused = false; // Flag to control pause/resume of scrolling
 
         function scroll() {
-            scrollAmount += scrollStep;
-            if (scrollAmount >= servicesTrack.scrollWidth / 2) {
-                scrollAmount = 0;
+            if (!isPaused) {
+                scrollAmount += scrollStep;
+                if (scrollAmount >= servicesTrack.scrollWidth / 2) {
+                    scrollAmount = 0;
+                }
+                servicesTrack.style.transform = `translateX(-${scrollAmount}px)`;
             }
-            servicesTrack.style.transform = `translateX(-${scrollAmount}px)`;
+
+            // Zoom effect logic: find the service item closest to center and add zoomed class
+            const container = document.querySelector('.services-list');
+            const containerRect = container.getBoundingClientRect();
+            const containerCenterX = containerRect.left + containerRect.width / 2;
+
+            let closestItem = null;
+            let closestDistance = Infinity;
+
+            const items = servicesTrack.querySelectorAll('.service-item');
+            items.forEach(item => {
+                const itemRect = item.getBoundingClientRect();
+                const itemCenterX = itemRect.left + itemRect.width / 2;
+                const distance = Math.abs(containerCenterX - itemCenterX);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestItem = item;
+                }
+            });
+
+            items.forEach(item => {
+                if (item === closestItem) {
+                    item.classList.add('zoomed');
+                } else {
+                    item.classList.remove('zoomed');
+                }
+            });
+
             requestAnimationFrame(scroll);
         }
+
+        // Add mouseover and mouseout event listeners to pause/resume scrolling
+        const serviceItems = servicesTrack.querySelectorAll('.service-item');
+        serviceItems.forEach(item => {
+            item.addEventListener('mouseover', () => {
+                isPaused = true;
+            });
+            item.addEventListener('mouseout', () => {
+                isPaused = false;
+            });
+        });
 
         requestAnimationFrame(scroll);
     }
 });
-
 
 // Scroll Reveal effect for testimonials blockquotes
 document.addEventListener('DOMContentLoaded', () => {

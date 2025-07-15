@@ -7,6 +7,8 @@
     <meta name="description" content="Agence audiovisuelle spécialisée dans la création de publicités et campagnes pour aider les entreprises à se démarquer." />
     <meta name="keywords" content="audiovisuel, publicité, agence, marketing, vidéo, communication, entreprise" />
     <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Open+Sans&display=swap" rel="stylesheet" />
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
@@ -31,22 +33,30 @@
             </div>
         </header>
 
-<section id="hero"> 
-    <div class="hero-background"></div>
-    <div class="container hero-content">
-        <h2>Votre partenaire pour des publicités audiovisuelles percutantes</h2>
-        <p>Nous aidons les entreprises à créer des campagnes publicitaires efficaces et mémorables.</p>
-        <a href="#contact" class="btn-primary btn-yellow">Contactez-nous</a>
-    </div>
-</section>
+    <section id="hero"> 
+        <div class="hero-background"></div>
+        <div class="container hero-content">
+            <h2>Votre partenaire pour des publicités audiovisuelles percutantes</h2>
+            <p>Nous aidons les entreprises à créer des campagnes publicitaires efficaces et mémorables.</p>
+            <a href="#contact" class="btn-primary btn-yellow">Contactez-nous</a>
+        </div>
+    </section>
 
     <section id="services" aria-label="Nos services">
         <div class="container">
-            <h2 class="nos-services">Nos <span id="rotating-text">Services</span></h2>
+            <h2 class="nos-services">
+            Nos
+            <span class="rotating-wrapper">
+                <span class="rotating-word">Services</span>
+                <span class="rotating-word">Conseils</span>
+                <span class="rotating-word">Créations</span>
+            </span>
+            </h2>
             <div class="services-list">
                 <div class="services-track">
                     <div class="service-item">
                         <img src="image/Production.jpg" alt="Production Vidéo" />
+                        <h3>Production Vidéo</h3>
                         <p>Création de vidéos promotionnelles, clips, et contenus audiovisuels adaptés à votre marque.</p>
                     </div>
                     <div class="service-item">
@@ -133,6 +143,8 @@
     </footer>
 
 <button id="back-to-top" aria-label="Retour en haut">↑</button>
+
+<div id="mouse-follower" aria-hidden="true"></div>
 
     <script src="script.js"></script>
 </body>
